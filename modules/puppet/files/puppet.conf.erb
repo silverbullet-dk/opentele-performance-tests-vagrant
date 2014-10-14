@@ -1,0 +1,29 @@
+[main]
+    user = puppet
+    group = puppet
+    report = true
+    reports = log,store
+
+    logdir=/var/log/puppet
+    vardir=/var/lib/puppet
+    ssldir=/var/lib/puppet/ssl
+    rundir=/var/run/puppet
+    factpath=$vardir/lib/facter
+    templatedir=$confdir/templates
+    prerun_command=/etc/puppet/etckeeper-commit-pre
+    postrun_command=/etc/puppet/etckeeper-commit-post
+
+[master]
+    certname = <%= puppetserver %>
+
+    storeconfigs=true
+
+    ssl_client_header = SSL_CLIENT_S_DN
+    ssl_client_verify_header = SSL_CLIENT_VERIFY
+[agent]
+    localconfig = $vardir/localconfig
+    classfile = $vardir/classes.txt
+    pluginsync = true
+    report = true
+    server = <%= puppetserver %>
+    certname = <%= scope.lookupvar('puppet::certname') %>
