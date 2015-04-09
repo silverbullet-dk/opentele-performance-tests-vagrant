@@ -12,10 +12,11 @@ After vagrant has finished running export a new vagrant box by running
 
 The new box is now ready to be used in performance tests.
 
-
 Current setup
 -----------
 The current setup creates an Ubuntu based machine with the following products
 * Apache Tomcat 7
 * MySQL
 * Oracle JDK 7
+* Collectl (for collecting memory, disk and cup statistics)
+* GnuPlot (for genereating plots of collected statistics)

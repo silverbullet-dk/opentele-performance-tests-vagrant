@@ -19,7 +19,7 @@
     stage=> 'pre'
   }
 
-  # Setup mysql 
+  # Setup mysql
   class { '::mysql::server':
     root_password => 'Silverbullet1',
   }
@@ -31,13 +31,13 @@
   $dbuser = "opentele"
   $dbpass = "opentele"
   $dbname = "opentele"
-                
+
   mysql::db { $dbname:
     user     => $dbuser,
     password => $dbpass,
     host     => 'localhost',
     grant    => ['ALL'],
-  } 
+  }
 
   # Setup datamon config file
   file { "/home/tomcat/":
@@ -63,29 +63,38 @@
     content => template("opentele/datamon-config.properties.erb"),
  }
 
-  
+
   # Java
   class { 'java::oracle_1_7_0':
     stage=> 'pre'
-  } 
+  }
 
   # Pick default JDK
   package { "oracle-java7-set-default": ensure => "installed" }
 
- # 
+ #
 
-  # Tomcat 
+  # Tomcat
   $tomcat_mirror = "http://archive.apache.org/dist/tomcat/"
   $tomcat_version = "7.0.53"
 
   class { 'tomcat':
     version     => 7,
-    sources     => true,  
+    sources     => true,
   }
 
-  tomcat::instance {"opentele":
+  tomcat::instance {"opentele-server":
     ensure    => present,
     java_home => "/usr/lib/jvm/java-7-oracle",
     http_port => "8080",
-    ajp_port    => "8009",
+    server_port => "8005",
+    ajp_port  => "8009",
+  }
+
+  tomcat::instance {"opentele-citizen-server":
+    ensure    => present,
+    java_home => "/usr/lib/jvm/java-7-oracle",
+    http_port => "8090",
+    server_port => "8006",
+    ajp_port  => "8010",
   }
